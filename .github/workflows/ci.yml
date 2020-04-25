@@ -1,0 +1,40 @@
+# 1、整个流程在master分支发生push事件时触发
+# 这里是工作流名称，可以省略
+name: GitHub Actions Build and Deploy Demo
+#  这里是触发条件
+on:
+  # 这里是推送到 master 分支
+  push:
+    branches:
+      - master
+
+# 2、只有一个任务，运行在虚拟机环境 ubuntu-latest
+# 这里是任务
+jobs:
+  # 这里是任务
+  build-and-deploy:
+    # 这里是运行环境
+    runs-on: ubuntu-latest
+    # 这里是运行步骤
+    steps:
+      
+      # 3、第一步是获取源码，使用的 Action 是 actions、checkout
+      # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
+      - name: Checkout
+        uses: actions/checkout@v2 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
+        with:
+          persist-credentials: false
+    
+      # 这里是构建
+      - name: Install and Build
+        run: |
+          npm install
+          npm run-script build
+      
+      # 4、第二步是部署，使用的 action 是  JamesIves/github-pages-deploy-action@releases/v3
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: build
