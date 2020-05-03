@@ -37,5 +37,4 @@ jobs:
         with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: build
-          BUILD_SCRIPT: mv dist public
+          FOLDER: dist
